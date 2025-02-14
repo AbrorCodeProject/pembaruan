@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine Surprise</title>
+    <style>
+        /* Background Video */
+        .video-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Overlay agar teks lebih terbaca */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        /* Konten utama */
+        .content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Teks animasi */
+        .text-container {
+            font-size: 40px;
+            font-weight: bold;
+            opacity: 0;
+            animation: fadeIn 2s forwards, wobble 2s infinite ease-in-out 2.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes wobble {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+            75% { transform: rotate(-3deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        /* Gambar beruang */
+        .bear-image {
+            width: 200px;
+            margin-top: 15px;
+            opacity: 0;
+            animation: fadeIn 2s forwards 1.5s;
+        }
+
+        /* Teks motivasi */
+        .motivation-text {
+            font-size: 30px;
+            font-weight: bold;
+            color: white;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            margin-top: 15px; /* Jarak dari gambar beruang */
+        }
+
+        /* Tombol */
+        .button-container {
+            position: absolute;
+            left: 50%;
+            top: 70%;
+            transform: translateX(-50%);
+            transition: left 0.5s ease-in-out, top 0.5s ease-in-out;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            font-size: 20px;
+            color: white;
+            background-color: #ff4d6d;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #e63950;
+        }
+
+        .btn:active {
+            transform: scale(0.9);
+        }
+
+        /* Efek berlari */
+        .running {
+            animation: runAway 0.5s linear infinite;
+        }
+
+        @keyframes runAway {
+            0% { transform: translateX(0); }
+            50% { transform: translateX(10px); }
+            100% { transform: translateX(-10px); }
+        }
+
+        /* Nama Pacar di Sudut Halaman */
+        .corner-text {
+            position: fixed;
+            bottom: 10px;
+            left: 15px;
+            font-size: 18px;
+            color: white;
+            font-weight: bold;
+            font-family: 'Arial', sans-serif;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 5px 10px;
+            border-radius: 10px;
+        }
+
+        /* Stiker Pig */
+        .pig-sticker {
+            position: fixed;
+            bottom: 10px;
+            right: 15px;
+            width: 80px;
+            animation: bounce 1.5s infinite ease-in-out;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Posisi dan tampilan tombol musik */
+        .music-control {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            z-index: 10; /* Pastikan tombol tetap terlihat di atas elemen lain */
+        }
+
+        #music-button {
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        #music-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page-content">
+
+        <!-- Background Video -->
+        <div class="video-container">
+            <video autoplay loop muted>
+                <source src="/flower-valentine/asset/background-video.mp4" type="video/mp4">
+                Browser Anda tidak mendukung tag video.
+            </video>
+        </div>
+
+        <!-- Overlay gelap agar teks lebih terbaca -->
+        <div class="overlay"></div>
+
+        <!-- Konten di atas video -->
+        <div class="content">
+            <div class="text-container">happy valentine my girl</div>
+            
+            <!-- Gambar beruang -->
+            <img src="/flower-valentine/asset/bear-removebg-preview.png" alt="Beruang Imut" class="bear-image">
+
+            <!-- Teks motivasi muncul setelah tombol terakhir diklik -->
+            <div class="motivation-text" id="motivation-text">Semangat terus yaa sayang ❤️</div>
+        </div>
+
+        <!-- Tombol -->
+        <div class="button-container" id="button-container">
+            <button class="btn" id="moving-button" onclick="moveButton()">Klik Lanjutkan</button>
+        </div>
+
+        <!-- Nama Pacar -->
+        <div class="corner-text">Padilah Ulpah Pulungan ❤️</div>
+
+        <!-- Pemutar Musik -->
+        <audio id="background-music" autoplay loop>
+            <source src="/flower-valentine/asset/music.mp3" type="audio/mpeg"> Browser Anda tidak mendukung audio.
+        </audio>
+
+        <!-- Tombol Play/Pause Musik -->
+        <div class="music-control">
+            <button id="music-button" onclick="toggleMusic()">🎵 Pause Musik</button>
+        </div>
+
+    </div>
+
+    <script>
+        let clickCount = 0;
+
+        function moveButton() {
+            clickCount++;
+
+            if (clickCount < 3) {
+                let button = document.getElementById("moving-button");
+                let buttonContainer = document.getElementById("button-container");
+
+                let maxX = window.innerWidth - 150;
+                let maxY = window.innerHeight - 100;
+
+                let randomX = Math.random() * maxX;
+                let randomY = Math.random() * maxY;
+
+                buttonContainer.style.left = randomX + "px";
+                buttonContainer.style.top = randomY + "px";
+
+                button.classList.add("running");
+
+                setTimeout(() => {
+                    button.classList.remove("running");
+                }, 500);
+            } else if (clickCount === 3) {
+                document.getElementById("motivation-text").style.opacity = "1";
+                setTimeout(() => {
+                    window.location.href = "index.html";
+                }, 2000);
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            setTimeout(function() {
+                document.querySelector(".page-content").classList.add("show");
+            }, 100); // Animasi dimulai setelah 100ms
+        });
+
+        let music = document.getElementById("background-music");
+        let musicButton = document.getElementById("music-button");
+
+        function toggleMusic() {
+            if (music.paused) {
+                music.play();
+                musicButton.textContent = "🎵 Pause Musik";
+            } else {
+                music.pause();
+                musicButton.textContent = "▶ Play Musik";
+            }
+        }
+
+        // Menyimpan status musik ke localStorage
+        if (!localStorage.getItem("musicPaused")) {
+            localStorage.setItem("musicPaused", "false"); // Musik dimulai
+        }
+
+        // Mengecek apakah musik harus diputar atau tidak
+        if (localStorage.getItem("musicPaused") === "true") {
+            music.pause();
+        }
+    </script>
+
+</body>
+</html>
